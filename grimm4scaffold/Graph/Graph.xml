@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<instance>
+  <presentation name="?" maxConstraintArity="2" format="XCSP 2.0" />
+  <domains nbDomains="10">
+    <domain name="N1" nbValues="1">8</domain>
+    <domain name="N2" nbValues="1">5</domain>
+    <domain name="N3" nbValues="1">7</domain>
+    <domain name="N4" nbValues="2">8 10</domain>
+    <domain name="N5" nbValues="1">7</domain>
+    <domain name="N6" nbValues="1">7</domain>
+    <domain name="N7" nbValues="2">6 1</domain>
+    <domain name="N8" nbValues="1">2</domain>
+    <domain name="N9" nbValues="1">8</domain>
+    <domain name="N10" nbValues="1">5</domain>
+  </domains>
+  <variables nbVariables="4">
+    <variable domain="N1" name="n1_1" />
+    <variable domain="N2" name="n2_1" />
+    <variable domain="N3" name="n3_1" />
+    <variable domain="N4" name="n4_1" />
+  </variables>
+  <relations nbRelations="0" />
+  <predicates nbPredicates="0" />
+  <constraints nbConstraints="1">
+    <constraint name="AllDiff4" arity="1" scope=" n4_1" reference="global:allDifferent">
+      <parameters>[ n4_1]</parameters>
+    </constraint>
+  </constraints>
+</instance>
