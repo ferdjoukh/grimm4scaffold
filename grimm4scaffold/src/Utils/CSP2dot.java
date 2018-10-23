@@ -26,29 +26,26 @@ import Utils.OCL.OclConstraints;
 
 public class CSP2dot {
 
-	ModelReader r;
-	String ModelFile;
-	String root;
-	String InstanceFile;
-	int refB;
-	ArrayList<Integer> sizes;
-	ArrayList<Integer> sizesMin;
-	private int maxDomains;
-	int mg=0;
-	GenXMLFile generation;
-	int nodes;
+	private ModelReader modelreader;
+	private String metamodel;
+	private String root;
+	private String instanceFile;
+	private ArrayList<Integer> sizes;
+	private ArrayList<Integer> sizesMin;
+	private GenXMLFile xcspGenerator;
+	private int nodes;
 	
 	/***
 	 * 
-	 * @param ModelFile: .ECORE meta-model File
-	 * @param racine: Root Class of this meta-model
-	 * @param InstanceFile: .XML file path of the produced CSP instance
+	 * @param metamodel: .ecore meta-model File
+	 * @param root: root class of this meta-model
+	 * @param instanceFile: .xml file path of the produced CSP instance
 	 */
 	public CSP2dot(String ModelFile, String racine,String InstanceFile){
 		
-		this.ModelFile = ModelFile;
+		this.metamodel = ModelFile;
 		this.root = racine;
-		this.InstanceFile = InstanceFile;
+		this.instanceFile = InstanceFile;
 	}
 	
 	/***
@@ -59,7 +56,7 @@ public class CSP2dot {
 	 * @param solution number
 	 * @throws IOException 
 	 */
-	public void CallCSPGenrator2(int nodes, int edges,double density, double lambda, int mg, int sol) throws IOException
+	public void CallCSPGenrator2(int nodes, int edges,double density, double lambda) throws IOException
 	{
 		this.nodes=nodes;
 		if(nodes % 2 == 1)
@@ -68,31 +65,31 @@ public class CSP2dot {
 		}
 		else
 		{
-		
-		this.mg=mg;
-				
+						
 		long debut; double duree;
 		debut=System.nanoTime();
 		
-		//Sa racine est Petrinet
-	    generation= new GenXMLFile(nodes, edges, density, lambda);
-		generation.GenerateXCSP(InstanceFile);
+		xcspGenerator= new GenXMLFile(nodes, edges, density, lambda);
+		xcspGenerator.GenerateXCSP(instanceFile);
 				
 		duree=(System.nanoTime()-debut)/1000000;
 		System.out.println("  [OK] XCSP file generated");
 		System.out.println("  [OK] generation time = "+ duree/1000);
 		
 		///////////////////////////////////////////////////////////////
-		//Ececuter le solveur
+		//
+		// Call the csp solver
+		//
 		////////////////////////////////////////////////////////////
 		BufferedReader r;
-		r=Execute(InstanceFile,sol);
+		r=executeCSPSolver(instanceFile);
 		ArrayList<Integer> vals= new ArrayList<Integer>();
 		vals=RValues(r);
-		int vv=0;
 						
 		///////////////////////////////////////////////////////////////
-		//Reconstruire une solution
+		//
+		//  Build a valid solution
+		//
 		/////////////////////////////////////////////////////////////
 		if(vals.size()!=0)
 		{
@@ -106,13 +103,12 @@ public class CSP2dot {
 	 * 
 	 * Call the CSP solver
 	 * 
-	 * @param Instancefile: CSP instance xml file
-	 * @param sol: solutions number
+	 * @param Instancefile: CSP instance file path
 	 * @return
 	 */
-	public BufferedReader Execute(String Instancefile, int sol){
+	public BufferedReader executeCSPSolver(String instancefile){
 
-		String cmd = "java -jar abssol.jar " + Instancefile +" -s="+ sol;
+		String cmd = "java -jar abssol.jar " + instancefile;
 		System.out.println("  [OK] Abscon Solver is processing ...");
 		
 		Process p = null;
@@ -226,15 +222,15 @@ public class CSP2dot {
 		
 		
 		ArrayList<Integer> myGeneratedWeights = null;
-		myGeneratedWeights= kimjongUn.generate(generation.getEdges()+1);
+		myGeneratedWeights= kimjongUn.generate(xcspGenerator.getEdges()+1);
 		
-		ArrayList<Integer> echantillon= generation.getEchantillon();
+		ArrayList<Integer> echantillon= xcspGenerator.getEchantillon();
 		/////////////////////////////////////////////////////////
 		/////////////////
 		//////////
 		///////
 		//  Créer les objets instances de classe et leurs attribut;
-		for(int i=1; i<=generation.getNodes();i++)
+		for(int i=1; i<=xcspGenerator.getNodes();i++)
 		{
 			//Add All the (2i+1,2i) edges
 			if(i%2==1)
@@ -253,7 +249,7 @@ public class CSP2dot {
 			{
 			 int j=1;
 			//Son degre sortant (de chaque noeud)
-				while(j<=sortant && variable<generation.getEdges())
+				while(j<=sortant && variable<xcspGenerator.getEdges())
 				{
 					weight = kimjongUn.generate(1).get(0);
 					
