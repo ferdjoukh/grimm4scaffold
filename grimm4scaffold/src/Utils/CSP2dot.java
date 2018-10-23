@@ -277,11 +277,11 @@ public class CSP2dot {
 		ecrivain.close();
 		
 		
-		////////////////////////////////////////////////
-		/////////////////////////
-		//////////
-		////        Générer le pdf...
-		
+		/////////////////////////////////
+		//
+		// Create the pdf
+		//
+		/////////////////////////////////
 		String cmd = "dot -Tpdf "+root+"/"+outputFileName+".dot -o "+root+ "/"+outputFileName+".pdf";
 		
 		Process p = null;
@@ -294,6 +294,22 @@ public class CSP2dot {
 		catch(Exception e)
 		{
 			System.out.println("  [PROBLEM] GraphViz Software is not installed. So pdf file is not generated");
+		}
+		
+		//////////////////////////////////
+		//
+		// Move the xml file
+		//
+		//////////////////////////////////
+		String moveXMLcmd = "mv "+root+"/Graph.xml "+root+"/"+outputFileName+".xml";
+		
+		try {
+			p = Runtime.getRuntime().exec(moveXMLcmd);
+			System.out.println("  [GENERATED] Scaffold xcsp file >> "+root+"/"+outputFileName +".xml");
+		}
+		catch(Exception e)
+		{
+			System.out.println("  [PROBLEM] while moving the xcsp file");
 		}
 		
 	}
@@ -309,11 +325,32 @@ public class CSP2dot {
 	public void CSP2CHR(ArrayList<Integer> values, String outputFileName) throws IOException{
 		
 		PrintWriter printwriter =  new PrintWriter(new BufferedWriter(new FileWriter(root+"/"+outputFileName +".chr")));
-		printwriter.write(values.toString()+"\n");
+		
+		String chromosome= ArrayList2CHR(values);
+		
+		printwriter.write(chromosome+"\n");
+		printwriter.write(root+"/"+ outputFileName +".xml\n");
+		printwriter.write(metamodel+"\n");
+		printwriter.write(root+"\n");
 		printwriter.close();
 		
 		System.out.println("  [GENERATED] Chromosome file >> "+root+"/"+outputFileName +".chr");
+	}
+	
+	/**
+	 * This method transforms an ArrayList of integer into a chromosome
+	 * 
+	 * @param values
+	 * @return
+	 */
+	private String ArrayList2CHR(ArrayList<Integer> values) {
+		String res= "";
 		
+		for (Integer i: values) {
+			res= res+ i +" ";
+		}
+		
+		return res;
 		
 	}
 }
