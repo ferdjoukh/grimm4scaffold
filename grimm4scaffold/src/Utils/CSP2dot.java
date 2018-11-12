@@ -34,6 +34,8 @@ public class CSP2dot {
 	private ArrayList<Integer> sizesMin;
 	private GenXMLFile xcspGenerator;
 	private int nodes;
+	private int minWeight=1; 
+	private int maxWeight=100;
 	
 	/***
 	 * 
@@ -59,8 +61,7 @@ public class CSP2dot {
 	public void CallCSPGenrator2(int nodes, int edges,double density, double lambda) throws IOException
 	{
 		this.nodes=nodes;
-		if(nodes % 2 == 1)
-		{
+		if(nodes % 2 == 1){
 			System.out.println("|\tFatal Error: Number of Vertices (="+nodes+") must be pair !");
 		}
 		else
@@ -77,14 +78,12 @@ public class CSP2dot {
 		System.out.println("  [OK] generation time = "+ duree/1000);
 		
 		///////////////////////////////////////////////////////////////
-		//
 		// Call the csp solver
-		//
 		////////////////////////////////////////////////////////////
-		BufferedReader r;
-		r=executeCSPSolver(instanceFile);
+		BufferedReader bufferedreader;
+		bufferedreader=executeCSPSolver(instanceFile);
 		ArrayList<Integer> vals= new ArrayList<Integer>();
-		vals=RValues(r);
+		vals=extractSolverSolution(bufferedreader);
 						
 		///////////////////////////////////////////////////////////////
 		//
@@ -124,7 +123,7 @@ public class CSP2dot {
 	        return null;
 	}
 	
-	public ArrayList<Integer> RValues(BufferedReader reader){
+	public ArrayList<Integer> extractSolverSolution(BufferedReader reader){
 		ArrayList<Integer> vals= new ArrayList<Integer>();
 		String line;
 		String du = null;
@@ -155,10 +154,8 @@ public class CSP2dot {
 			}
 			if(found==0)
 				System.out.println("  [PROBLEM] The CSP instance is unsatisfiable !! :(");
-			else
-			{
+			else {
 				System.out.println("  [OK] Resolution time" +du);
-				
 			}
 			
 		} catch (IOException e) {
@@ -168,7 +165,6 @@ public class CSP2dot {
 		}
 		return vals;
 	}
-	
 	
 	public int domaineSum(int k)
 	{
@@ -214,22 +210,20 @@ public class CSP2dot {
 		String AttrDots="";
 		int lb=0,ub=0;
 		
-		///////////////////////////////////////////////////////////:
-		//   Add possibility of entering this by user
-		//
-		//
-		Uniform kimjongUn= new Uniform(1,50);
+		///////////////////////////////////////////////////////
+		//   Create the probability sampler for weight
+		///////////////////////////////////////////////////////
+		Uniform uniformSampler= new Uniform(minWeight,maxWeight);
 		
 		
 		ArrayList<Integer> myGeneratedWeights = null;
-		myGeneratedWeights= kimjongUn.generate(xcspGenerator.getEdges()+1);
+		myGeneratedWeights= uniformSampler.generate(xcspGenerator.getEdges()+1);
 		
 		ArrayList<Integer> echantillon= xcspGenerator.getEchantillon();
-		/////////////////////////////////////////////////////////
-		/////////////////
-		//////////
-		///////
-		//  Créer les objets instances de classe et leurs attribut;
+		
+		///////////////////////////////////////////////////////////
+		//  Create vertices and nodes
+		///////////////////////////////////////////////////////////
 		for(int i=1; i<=xcspGenerator.getNodes();i++)
 		{
 			//Add All the (2i+1,2i) edges
@@ -251,7 +245,7 @@ public class CSP2dot {
 			//Son degre sortant (de chaque noeud)
 				while(j<=sortant && variable<xcspGenerator.getEdges())
 				{
-					weight = kimjongUn.generate(1).get(0);
+					weight = uniformSampler.generate(1).get(0);
 					
 					if(!references.contains(i+"-"+vals.get(variable)) && !references.contains(vals.get(variable)+"-"+i))
 					{
@@ -261,26 +255,14 @@ public class CSP2dot {
 					variable++;
 					j++;
 				}
-			
-				
 			}
-			
-    	}
-				//////////////////////////////////////////////////////////
-				//// Choose A weight from the Randomly generated weights
-				//////////////////////////////////////////////////////////
-		//		
-					
-		
+		}
 		
 		ecrivain.write("} \n");
 		ecrivain.close();
 		
-		
 		/////////////////////////////////
-		//
 		// Create the pdf
-		//
 		/////////////////////////////////
 		String cmd = "dot -Tpdf "+root+"/"+outputFileName+".dot -o "+root+ "/"+outputFileName+".pdf";
 		
@@ -297,9 +279,7 @@ public class CSP2dot {
 		}
 		
 		//////////////////////////////////
-		//
 		// Move the xml file
-		//
 		//////////////////////////////////
 		String moveXMLcmd = "mv "+root+"/Graph.xml "+root+"/"+outputFileName+".xml";
 		
@@ -312,6 +292,10 @@ public class CSP2dot {
 			System.out.println("  [PROBLEM] while moving the xcsp file");
 		}
 		
+		//////////////////////////////////
+		// Generate the .grimm file
+		//////////////////////////////////
+		generateConfigFile(root+"/"+outputFileName +".grimm");
 	}
 	
 	/***
@@ -327,13 +311,12 @@ public class CSP2dot {
 		PrintWriter printwriter =  new PrintWriter(new BufferedWriter(new FileWriter(root+"/"+outputFileName +".chr")));
 		
 		String chromosome= ArrayList2CHR(values);
-		
 		printwriter.write(chromosome+"\n");
 		printwriter.write(root+"/"+ outputFileName +".xml\n");
+		printwriter.write(root+"/"+ outputFileName +".grimm\n");
 		printwriter.write(metamodel+"\n");
 		printwriter.write(root+"\n");
 		printwriter.close();
-		
 		System.out.println("  [GENERATED] Chromosome file >> "+root+"/"+outputFileName +".chr");
 	}
 	
@@ -350,7 +333,22 @@ public class CSP2dot {
 			res= res+ i +" ";
 		}
 		
-		return res;
-		
+		return res;	
+	}
+	
+	/**
+	 * Create the .grimm config file for a given Graph Model
+	 * 
+	 * @param filePath
+	 */
+	private void generateConfigFile(String filePath) {
+		ConfigFileGenerator configfilegenerator = new ConfigFileGenerator(filePath, xcspGenerator.getNodes(), 
+				xcspGenerator.getEdges(), minWeight, maxWeight, xcspGenerator.getMaxNodeBound());
+		try {
+			configfilegenerator.generate();
+			System.out.println("  [GENERATED] grimm config file >> "+ filePath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

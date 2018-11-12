@@ -15,76 +15,64 @@ import org.eclipse.emf.ecore.EReference;
 public class ConfigFileGenerator {
 
 	
-	private String mm;
-	private String rootClass;
-	private ModelReader modelReader;
+	private String filePath; 
+	private int vertices;
+	private int edges;
+	private int minWeight;
+	private int maxWeight;
+	private int refBound;
 	
 	
-	public ConfigFileGenerator(String mm, String rootClass)
+	public ConfigFileGenerator(String filePath, int vertices, int edges, int minWeight, int maxWeight, int refBound)
 	{
-		this.mm = mm;
-		this.rootClass = rootClass;
-		modelReader = new ModelReader(mm, rootClass, 2, 2);
+		this.filePath= filePath;
+		this.vertices= vertices;
+		this.edges= edges;
+		this.maxWeight=maxWeight;
+		this.minWeight=minWeight;
+		this.refBound= refBound;
 	}
 	
 	public void generate() throws IOException
 	{
-		String filePath= rootClass+".grimm";
-		new File(rootClass).mkdir();
-	
-		PrintWriter ecrivain =  new PrintWriter(new BufferedWriter(new FileWriter(rootClass+"/"+filePath)));
 		
-		ecrivain.write("%This is a configuration file for Grimm Tool \n");
-		ecrivain.write("%Please do not change the ordering or the name of any element !\n");
-		ecrivain.write("%Put a numerical value instead of n, min, max, lambda, ... \n");
+		PrintWriter ecrivain =  new PrintWriter(new BufferedWriter(new FileWriter(filePath)));
 		
-		ecrivain.write("% \n");
-		ecrivain.write("% \n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%Number of instances for Classes \n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-				
-		ArrayList<EClass> cls= new ArrayList<EClass>();
-		cls= (ArrayList<EClass>) modelReader.getClasses();
-		for(EClass c: cls)
-		{
-			String name= c.getName();
-			if (name.compareTo(rootClass)!=0)
-			ecrivain.write(name+"=n\n");
-		}
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%Domains of the features \n");
-		ecrivain.write("%Please change min and max values\n");
-		ecrivain.write("%To choose another distribution: Unif(a,b), Norm(mu,sigma), Expo(mu) \n"
-				+ "-------------------------------------------------------------\n");
-		ecrivain.write("%-------------------------------------------------------------\n");
+		ecrivain.write("%This is a configuration file for Grimm Tool \n" + 
+				"%Please do not change the ordering or the name of any element !\n" + 
+				"%Put a numerical value instead of 0, lower, upper, a and z \n" + 
+				"% \n" + 
+				"% \n" + 
+				"%-------------------------------------------------------------\n" + 
+				"% Number of instances for Classes \n" + 
+				"%-------------------------------------------------------------\n" + 
+				"%-------------------------------------------------------------\n");
 		
-		ecrivain.write("Edge/weight->Unif(min,max)\n");
+		ecrivain.write("Vertex="+vertices+"\n");
+		ecrivain.write("Edge="+edges+"\n");
 		
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%Distributions of Degrees \n");
-		ecrivain.write("%To choose another distribution: Unif(a,b), Norm(mu,sigma), Expo(mu)\n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%-------------------------------------------------------------\n");
+		ecrivain.write("%-------------------------------------------------------------\n" + 
+				"%-------------------------------------------------------------\n" + 
+				"%Domains of the features \n" + 
+				"%-------------------------------------------------------------\n" + 
+				"%-------------------------------------------------------------\n" + 
+				"");
 		
-		ecrivain.write("Degree->Expo(mu)\n");
+		ecrivain.write("Edge/weight="+minWeight+".."+maxWeight+"\n");
+		
+		ecrivain.write("%-------------------------------------------------------------\n" + 
+				"%-------------------------------------------------------------\n" + 
+				"%Some others \n" + 
+				"%-------------------------------------------------------------\n" + 
+				"%-------------------------------------------------------------\n" + 
+				"%-------------------------------------------------------------\n");
+			
+		ecrivain.write("RefsBound=" +refBound+"\n" );
+		ecrivain.write("FeaturesBound=0\n");
 		
 		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%Some others \n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-		ecrivain.write("%-------------------------------------------------------------\n");
-		
-		ecrivain.write("RefsBound=0\n");
-				
-		ecrivain.write("%-------------------------------------------------------------\n");
-		
 		
 		ecrivain.close();
-		System.out.println("|\t--Configuration file: \""+rootClass+"/"+ filePath + "\" was generated ! =) \n|");
 		
 	}
 }

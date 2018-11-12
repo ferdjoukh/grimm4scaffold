@@ -29,19 +29,19 @@ public class GenXMLFile {
 	int nbRel=0;
 	int nbCons=0;
 	
-	
 	private int nodes;
 	private double density;
 	private double lambda;
 	private int edges;
+	private int maxNodeBound=0;
 	private ArrayList<Integer> echantillon= null;
 	private ArrayList<Integer> pickDomain= new ArrayList<Integer>();
 	
 	
 	private void buildPickDomain()
 	{
-		for(int i=1;i<= nodes;i++)
-		{
+		for(int i=1;i<= nodes;i++){
+			
 			int j= echantillon.get(i-1)/2;
 			for(int k=1;k<=j;k++)
 				pickDomain.add(i);
@@ -64,8 +64,6 @@ public class GenXMLFile {
 		this.edges= edges;
 		this.density= density;
 		this.lambda= lambda;
-	//	computeEdges(nodes, density);
-	//	System.out.println("\tEdges="+ this.edges);
 	}
 	
 	public int getNodes() {
@@ -76,17 +74,16 @@ public class GenXMLFile {
 		return edges;
 	}
 	
+	public int getMaxNodeBound() {
+		return maxNodeBound;
+	}
+
 	private void genVars()
 	{
 		LoiExponentielle expo= new LoiExponentielle(lambda);
 		this.echantillon = expo.generate(nodes+1);
 		
 		buildPickDomain();
-			
-	//	Generator.prettyPrint(echantillon);
-	//	System.out.println("\n");
-	//	Generator.prettyPrint(pickDomain);
-	//	System.out.println("\n");
 		
 		String vars="";
 		
@@ -95,32 +92,34 @@ public class GenXMLFile {
 			//Create a domain
 			   // That excludes i and contains only 30 nodes
 			String domainName= "N"+i;
-		//	createDomain(domainName,1,nodes,i);
 			
-			//Son degre sortant (de chaque noeud)
-			int sortant= echantillon.get(i-1)/2 + echantillon.get(i-1) % 2; 
+			//number of connected nodes for each node
+			int nodesBound= echantillon.get(i-1)/2 + echantillon.get(i-1) % 2; 
 			
-		//	createDomain(domainName, 1, nodes, i, echantillon.get(i-1));
-			createDomain(domainName, 1, nodes, i, sortant);
+			//Update maxNodeBound
+			if(nodesBound > maxNodeBound) {
+				maxNodeBound = nodesBound;
+			}
+			
+			createDomain(domainName, 1, nodes, i, nodesBound);
 			
 			
 			//Create a node variable
 			String variableName;
 			String varsAllDiff="";
 			int j=1;
-			while(j<=sortant && nbVars<edges)
+			while(j<=nodesBound && nbVars<edges)
 			{
-				//Create j links or variables
+				//Create j link variables
 				variableName= "n"+i+"_"+j;
 				vars= vars+ " "+variableName;
 				createVariable(variableName,domainName);
 				varsAllDiff= varsAllDiff+ " n"+i+"_"+j;
 				j++;
-		//	System.out.println("node="+i+" -- "+ j+" < "+echantillon.get(i-1) +" && "+ nbVars +" < "+ edges);
 			}
 			
 			//Create one all diff constraint for pointed nodes
-			if(!varsAllDiff.equals("") && sortant!=1 )
+			if(!varsAllDiff.equals("") && nodesBound!=1 )
 				createAllDiff("AllDiff"+i, j-1, varsAllDiff);
 		}
 	
@@ -128,10 +127,6 @@ public class GenXMLFile {
 		
 		for(int i=1;i<=nodes;i++)
 			vals= vals+" "+i;
-		
-	//	createGcc3("GccEntrant", edges, nodes, vars, vals, echantillon, echantillon);
-		
-	 		
 	}
 	
 	public void createGcc3(String nom,int arity,int valsarity,String vars,String vals, ArrayList<Integer> lower, ArrayList<Integer> upper)

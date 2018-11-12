@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<instance>
+  <presentation name="?" maxConstraintArity="2" format="XCSP 2.0" />
+  <domains nbDomains="50">
+    <domain name="N1" nbValues="1">46</domain>
+    <domain name="N2" nbValues="2">28 18</domain>
+    <domain name="N3" nbValues="2">21 35</domain>
+    <domain name="N4" nbValues="2">32 14</domain>
+    <domain name="N5" nbValues="1">25</domain>
+    <domain name="N6" nbValues="1">1</domain>
+    <domain name="N7" nbValues="1">11</domain>
+    <domain name="N8" nbValues="1">41</domain>
+    <domain name="N9" nbValues="1">46</domain>
+    <domain name="N10" nbValues="1">15</domain>
+    <domain name="N11" nbValues="1">29</domain>
+    <domain name="N12" nbValues="1">8</domain>
+    <domain name="N13" nbValues="1">37</domain>
+    <domain name="N14" nbValues="1">27</domain>
+    <domain name="N15" nbValues="1">12</domain>
+    <domain name="N16" nbValues="2">18 14</domain>
+    <domain name="N17" nbValues="1">29</domain>
+    <domain name="N18" nbValues="3">26 28 31</domain>
+    <domain name="N19" nbValues="1">32</domain>
+    <domain name="N20" nbValues="1">35</domain>
+    <domain name="N21" nbValues="1">18</domain>
+    <domain name="N22" nbValues="1">12</domain>
+    <domain name="N23" nbValues="1">18</domain>
+    <domain name="N24" nbValues="1">2</domain>
+    <domain name="N25" nbValues="1">48</domain>
+    <domain name="N26" nbValues="2">16 6</domain>
+    <domain name="N27" nbValues="1">44</domain>
+    <domain name="N28" nbValues="1">30</domain>
+    <domain name="N29" nbValues="1">43</domain>
+    <domain name="N30" nbValues="1">32</domain>
+    <domain name="N31" nbValues="1">40</domain>
+    <domain name="N32" nbValues="1">12</domain>
+    <domain name="N33" nbValues="1">25</domain>
+    <domain name="N34" nbValues="1">47</domain>
+    <domain name="N35" nbValues="1">1</domain>
+    <domain name="N36" nbValues="1">28</domain>
+    <domain name="N37" nbValues="1">24</domain>
+    <domain name="N38" nbValues="1">29</domain>
+    <domain name="N39" nbValues="1">4</domain>
+    <domain name="N40" nbValues="1">35</domain>
+    <domain name="N41" nbValues="1">26</domain>
+    <domain name="N42" nbValues="1">32</domain>
+    <domain name="N43" nbValues="1">8</domain>
+    <domain name="N44" nbValues="2">23 12</domain>
+    <domain name="N45" nbValues="1">44</domain>
+    <domain name="N46" nbValues="1">34</domain>
+    <domain name="N47" nbValues="2">23 21</domain>
+    <domain name="N48" nbValues="1">20</domain>
+    <domain name="N49" nbValues="2">3 36</domain>
+    <domain name="N50" nbValues="1">8</domain>
+  </domains>
+  <variables nbVariables="60">
+    <variable domain="N1" name="n1_1" />
+    <variable domain="N2" name="n2_1" />
+    <variable domain="N2" name="n2_2" />
+    <variable domain="N3" name="n3_1" />
+    <variable domain="N3" name="n3_2" />
+    <variable domain="N4" name="n4_1" />
+    <variable domain="N4" name="n4_2" />
+    <variable domain="N5" name="n5_1" />
+    <variable domain="N6" name="n6_1" />
+    <variable domain="N7" name="n7_1" />
+    <variable domain="N8" name="n8_1" />
+    <variable domain="N9" name="n9_1" />
+    <variable domain="N10" name="n10_1" />
+    <variable domain="N11" name="n11_1" />
+    <variable domain="N12" name="n12_1" />
+    <variable domain="N13" name="n13_1" />
+    <variable domain="N14" name="n14_1" />
+    <variable domain="N15" name="n15_1" />
+    <variable domain="N16" name="n16_1" />
+    <variable domain="N16" name="n16_2" />
+    <variable domain="N17" name="n17_1" />
+    <variable domain="N18" name="n18_1" />
+    <variable domain="N18" name="n18_2" />
+    <variable domain="N18" name="n18_3" />
+    <variable domain="N19" name="n19_1" />
+    <variable domain="N20" name="n20_1" />
+    <variable domain="N21" name="n21_1" />
+    <variable domain="N22" name="n22_1" />
+    <variable domain="N23" name="n23_1" />
+    <variable domain="N24" name="n24_1" />
+    <variable domain="N25" name="n25_1" />
+    <variable domain="N26" name="n26_1" />
+    <variable domain="N26" name="n26_2" />
+    <variable domain="N27" name="n27_1" />
+    <variable domain="N28" name="n28_1" />
+    <variable domain="N29" name="n29_1" />
+    <variable domain="N30" name="n30_1" />
+    <variable domain="N31" name="n31_1" />
+    <variable domain="N32" name="n32_1" />
+    <variable domain="N33" name="n33_1" />
+    <variable domain="N34" name="n34_1" />
+    <variable domain="N35" name="n35_1" />
+    <variable domain="N36" name="n36_1" />
+    <variable domain="N37" name="n37_1" />
+    <variable domain="N38" name="n38_1" />
+    <variable domain="N39" name="n39_1" />
+    <variable domain="N40" name="n40_1" />
+    <variable domain="N41" name="n41_1" />
+    <variable domain="N42" name="n42_1" />
+    <variable domain="N43" name="n43_1" />
+    <variable domain="N44" name="n44_1" />
+    <variable domain="N44" name="n44_2" />
+    <variable domain="N45" name="n45_1" />
+    <variable domain="N46" name="n46_1" />
+    <variable domain="N47" name="n47_1" />
+    <variable domain="N47" name="n47_2" />
+    <variable domain="N48" name="n48_1" />
+    <variable domain="N49" name="n49_1" />
+    <variable domain="N49" name="n49_2" />
+    <variable domain="N50" name="n50_1" />
+  </variables>
+  <relations nbRelations="0" />
+  <predicates nbPredicates="0" />
+  <constraints nbConstraints="9">
+    <constraint name="AllDiff2" arity="2" scope=" n2_1 n2_2" reference="global:allDifferent">
+      <parameters>[ n2_1 n2_2]</parameters>
+    </constraint>
+    <constraint name="AllDiff3" arity="2" scope=" n3_1 n3_2" reference="global:allDifferent">
+      <parameters>[ n3_1 n3_2]</parameters>
+    </constraint>
+    <constraint name="AllDiff4" arity="2" scope=" n4_1 n4_2" reference="global:allDifferent">
+      <parameters>[ n4_1 n4_2]</parameters>
+    </constraint>
+    <constraint name="AllDiff16" arity="2" scope=" n16_1 n16_2" reference="global:allDifferent">
+      <parameters>[ n16_1 n16_2]</parameters>
+    </constraint>
+    <constraint name="AllDiff18" arity="3" scope=" n18_1 n18_2 n18_3" reference="global:allDifferent">
+      <parameters>[ n18_1 n18_2 n18_3]</parameters>
+    </constraint>
+    <constraint name="AllDiff26" arity="2" scope=" n26_1 n26_2" reference="global:allDifferent">
+      <parameters>[ n26_1 n26_2]</parameters>
+    </constraint>
+    <constraint name="AllDiff44" arity="2" scope=" n44_1 n44_2" reference="global:allDifferent">
+      <parameters>[ n44_1 n44_2]</parameters>
+    </constraint>
+    <constraint name="AllDiff47" arity="2" scope=" n47_1 n47_2" reference="global:allDifferent">
+      <parameters>[ n47_1 n47_2]</parameters>
+    </constraint>
+    <constraint name="AllDiff49" arity="2" scope=" n49_1 n49_2" reference="global:allDifferent">
+      <parameters>[ n49_1 n49_2]</parameters>
+    </constraint>
+  </constraints>
+</instance>

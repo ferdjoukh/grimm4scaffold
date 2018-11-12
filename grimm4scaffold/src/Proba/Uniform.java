@@ -15,15 +15,14 @@ public class Uniform extends Generator{
 	}
 	
 	@Override
-	public ArrayList<Integer> generate(int z)
+	public ArrayList<Integer> generate(int nbValues)
 	{
 		ArrayList<Integer> vals= new ArrayList<Integer>();
 		
 		double i;
 		
-		for(int j=1;j<=z;j++)
+		for(int j=1;j<=nbValues;j++)
 		{
-		
 			uniforme = Math.random();
 			i= uniforme*this.n+min-1;
 			int k=(int) Math.round(i);
